@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title> ShopZone | ShopZone Reviews </title>
+		<title> ShopZone | My Orders </title>
 	</head>
 	
 	<style>
@@ -95,7 +95,11 @@
 						{% endif %} </td>
 
 					<td> {{ i.status_change_time }} </td>
-					<td> <a href="/shop/cancel_order/{{ i.pk }}" target="_blank"><div class="linkdiv"> Cancel </div></a></td>
+					{% if i.status == 5 %}
+						<td> <a href="/shop/cancel_order/{{ i.pk }}" target="_blank"><div class="linkdiv"> Cancel </div></a></td>
+					{% else %}
+						<td> <a href="/shop/cancel_order/{{ i.pk }}"><div class="linkdiv"> Cancel </div></a></td>
+					{% endif %}
 				</tr>
 				{% endfor %}
 			<table/>
