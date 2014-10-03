@@ -1,57 +1,138 @@
-<h1 align="center" style="color:#663399">ShopZone : The Online Retail Store</h1>
-<h2 align="center" style="color:#336699">Product Details </h2>
+<html>
+	<head>
+		<title> ShopZone | Product Details </title>
+	</head>
+	
+	<style>
+		a:link{
+			text-decoration:none
+		}
+		a:hover {
+			background-color: #DDDDDD;
+		}
+		.title:hover{
+			background-color: #FFFFFF;
+		}
+		.headdiv {
+			height:1px;
+			width:100%;
+			font-size:1em;
+			text-align:center;
+			color:#663399;
+			padding-bottom:30px;
+			margin-bottom:20px;
+		}
+		.headdiv2 {
+			height:10px;
+			width:100%;
+			font-size:1.5em;
+			text-align:center;
+			color:#663399;
+			border-bottom:1px dotted black;
+			padding-bottom:30px;
+			margin-bottom:20px;
+		}
+		.linkdiv:hover {
+			background-color: #DDDDDD;
+		}
+		.columns {
+			height:450px;
+			width:45%;
+			text-align:center;
+			font-size:1.25em;
+			color:#663399;
+			overflow:scroll;
+			float:left;
+			border-left:50px solid white;
+		}
+	</style>
 
-{% if product and seller and related %}
-	<div style="border:1px solid black">
-		<div align="center" style="border: 1px solid red; width:500px;">
-			<div style="width:500px; border: 1px solid blue;">
-				<table style="font-size:1.25em">
-					<tr>
-						<td> Product Name: <td>
-						<td> {{ product.product_name }} </td>
-					</tr>
-					<tr>
-						<td> Price: <td>
-						<td> Rs. {{ product.price }} </td>
-					</tr>
-					<tr>
-						<td> Description: <td>
-						<td> {{ product.description }} </td>
-					</tr>
-					<tr>
-						<td> Average Rating: <td>
-						{% if avg_rating %}
-							<td> {{ avg_rating }} </td>
-						{% else %}
-							<td> 0.0 </td>
-						{% endif %}
-					</tr>
-					<tr>
-						<td> Category: <td>
-						<td> {{ product.category }} </td>
-					</tr>
-					<tr>
-						<td> Seller: <td>
-						<td> <a href="http://localhost:8000/shop/seller/{{ seller }}/"> {{ product.seller }} </a></td>
-					</tr>
-					<tr>
-						<td> Reviews: <td>
-						<td> <a href="/shop/{{ product.id }}/productreviews/">{{ product.product_name }}</td>
-					</tr>
-				</table>
-			</div>
-			
-			<div style="width:500px; border: 1px solid yellow;">
-				<a href= "/shop/place_order/{{ product.id }}/" ><p align=center style="color:#006600; font-size:1.5em;">Place order</p></a>
-			</div>
-			
-			<div style="border:1px solid red; float:left; width:500px; heigth:1px; background-color:#ffff00; overflow:scroll;">
-				<p>hello world</p>
-			</div>
+	<body link="#663399" vlink="#663399" alink="#808080">
+		<!-- Heading -->
+		<div class="headdiv">
+			<h1><a href="/" class="title">ShopZone : The Online Retail Store</a></h1>
 		</div>
 
-	</div>
+		<!-- Just below the heading :p -->
+		<div class="headdiv2">
 
-{% else %}
-	<p>Invalid Product ID.</p>
-{% endif %}
+			<div align="left" style="float:left">
+				<a href="/shop/all/">All Products</a>
+			</div>
+
+			<div align="centre" style="float:left; margin-left:200px;">
+				<form action="/shop/by_search/" method="POST">
+					{% csrf_token %}
+					<input type="text" name="product" value="Search by product name, seller name or category!" size="100px"/>
+					<input type="submit" value="Search"/>
+				</form>
+			</div>
+
+			<div align="left" style="float:right">
+				Welcome <a href="/shop/my_orders/"> {{ user.username }} </a>
+			</div>
+
+		</div>
+
+		<div>
+			<h2 align="center" style="color:#336699">Product Details</h2>
+		</div>
+
+		<!-- <div style="width:100%; heigth:200px; border:1px solid black;"> -->
+		{% if product %}
+			<div style="width:49%; heigth:200px; float:left;">
+				<table align="center" style="font-size:1.25em;">
+					<tr align="center">
+						<td width="20%"> Name: </td>
+						<td width="70%"> {{ product }} </td>
+					</tr>
+					<tr align="center">
+						<td> Price: </td>
+						<td> {{ product.price }} </td>
+					</tr>
+					<tr align="center">
+						<td> Category: </td>
+						<td> {{ product.category }} </td>
+					</tr>
+					<tr align="center">
+						<td> Average Rating: </td>
+						<td> {{ avg_rating }} </td>
+					</tr>
+					<tr align="center">
+						<td> Description: </td>
+						<td> {{ product.description }} </td>
+					</tr>
+					<tr align="center">
+						<td> Reviews: </td>
+						<td> <a href="/shop/{{ product.id }}/productreviews/"><div class="linkdiv">{{ product }} </div> </a> </td>
+					</tr>
+					<tr align="center">
+						<td> Seller: </td>
+						<td> <a href="/shop/seller/{{ seller }}"><div class="linkdiv">{{ product.seller }} </div> </a> </td>
+					</tr>
+				</table>
+
+				<div>
+					<a href= "/shop/place_order/{{ product.id }}/" ><p align=center style="color:#006600; font-size:1.5em;">Place order</p></a>
+				</div>
+			</div>
+
+		{% endif %}
+
+		{% if related %}
+			<div class="columns">
+				<div>
+					<h3 align="center" style="color:#336699"> Related Products</h3>
+				</div>
+				<table align="center">
+					{% for i in related %}
+						<tr align="center" style="font-size:1.25em;">
+							<td> <a href="/shop/{{ i.pk }}/"> <div class="linkdiv">{{ i }} </div> </a> </td>
+							<td width="11%"> {{ i.price }} </td>
+						</tr>
+					{% endfor %}
+				</table>
+			</div>
+		{% endif %}
+	</body>
+</html>

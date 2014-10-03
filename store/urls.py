@@ -16,5 +16,5 @@ urlpatterns = patterns('',
     url(r'^(?P<product_id>\d+)/productreviews/$', views.product_review),
     url(r'^place_order/(?P<product_id>\d+)/$', views.place_order),
     url(r'^by_search/$', views.by_search),
-    url(r'^(?P<product_category>\w+)/$', views.product_by_category),
+    url(r'^(?P<product_category>\w+)/$', views.by_category),
     )

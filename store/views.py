@@ -6,8 +6,8 @@ from store.models import Product, ProductReview, Seller, SellerReview, StoreRevi
 from store.models import Order, Customer
 
 import re
-user = authenticate(username='Abhay', password='cmr')
-##user = None
+user = authenticate(username='Abhay', password='cmr') ## Use this while debugging.
+##user = None ## Use this to force a login.
 
 def calculate_average_rating(reviews): ## TR1 Done.
     """
@@ -21,9 +21,16 @@ def calculate_average_rating(reviews): ## TR1 Done.
     return avg_rating
 
 def login_page(request): ## VTR1 Re-do.
+    """
+    Renders the login page.
+    """
     return render(request, 'store/login.html', {})
 
 def login_okay(request): ## TR1 Done.
+    """
+    Users are redirected to '/' if the login is successful.
+    Reload '/shop/login/' if unsuccessful.
+    """
     global user
     username = request.POST['username']
     password = request.POST['password']
@@ -48,26 +55,12 @@ def home_page(request): ## VTR1 Done.
     except:
         return HttpResponseRedirect('/shop/login/')
 
-    ## Get Products and categories.
+    ## Get Products, categories and store reviews.
     all_products_list = Product.objects.all().order_by('product_name')[:10]
     categories = set([product.category for product in all_products_list])
     store_review = StoreReview.objects.all().order_by('time_stamp')[:10]
     context = {'all_products_list':all_products_list, 'categories':categories, 'store_review':store_review, 'user':user}
     return render(request, 'store/home_page.html', context)
-
-def store_reviews(request): ## VTR1 Done.
-    """
-    Displays all store reviews ordered by time_stamp.
-    """
-    try:
-        if user is None:
-            return HttpResponseRedirect('/shop/login/')
-    except:
-        return HttpResponseRedirect('/shop/login/')
-    
-    store_reviews = StoreReview.objects.all()
-    context = {'store_reviews':store_reviews, 'user':user}
-    return render(request, 'store/store_reviews.html', context)
 
 def by_search(request): ## VTR1 Done.
     """
@@ -86,7 +79,7 @@ def by_search(request): ## VTR1 Done.
         pattern += '[' + i.lower() + i.upper() + ']'
 
     ## This name has has been chosen so that I can
-    ## reuse the template of the function product_by_category
+    ## reuse the template product_by_category
     all_products_list = []
     for i in products:
         if re.search(pattern, i.product_name) is not None or re.search(pattern, i.seller.seller_name) is not None or re.search(pattern, i.category) is not None:
@@ -96,10 +89,9 @@ def by_search(request): ## VTR1 Done.
                'product_category':name,
                'from_search':True,
                'user':user}
-    return render(request, 'store/products_by_category.html', context)
-##    return HttpResponse(str(all_products_list))
+    return render(request, 'store/by_category.html', context)
 
-def product_by_category(request, product_category): ## VTR1 Done.
+def by_category(request, product_category): ## VTR1 Done.
     """
     Displays products by category.
     """
@@ -108,7 +100,7 @@ def product_by_category(request, product_category): ## VTR1 Done.
             return HttpResponseRedirect('/shop/login/')
     except:
         return HttpResponseRedirect('/shop/login/')
-    
+
     product_category = product_category[0].upper() + product_category[1:].lower()
     if product_category == 'All':
         all_products_list = Product.objects.all().order_by('product_name')
@@ -117,12 +109,18 @@ def product_by_category(request, product_category): ## VTR1 Done.
     context = {'all_products_list':all_products_list,
                'product_category':product_category,
                'user':user}
-    return render(request, 'store/products_by_category.html', context)
+    return render(request, 'store/by_category.html', context)
 
-def product(request, product_id): ## VTR1-- BIG MESS!!
+def product(request, product_id): ## VTR2-- Done.
     """
     Displays a particular products' details.
     """
+    try:
+        if user is None:
+            return HttpResponseRedirect('/shop/login/')
+    except:
+        return HttpResponseRedirect('/shop/login/')
+
     product = Product.objects.get(pk=product_id)
     seller = Seller.objects.all().filter(seller_name=product.seller)[0] #Wow! :@
     reviews = ProductReview.objects.all().filter(product=product_id)
@@ -133,14 +131,17 @@ def product(request, product_id): ## VTR1-- BIG MESS!!
     related2 = Product.objects.all().filter(category=product.category)
     related = []
     for Li in related1:
-        if Li not in related2:
+        if Li != product:
             related.append(Li)
     for Li in related2:
-        if Li not in related:
+        if Li not in related and Li != product:
             related.append(Li)
+    import random
+    random.shuffle(related)
+    del(random)
     ## End of related.
-    
-    context = {'product': product, 'seller':seller.pk, 'avg_rating': avg_rating, 'related':related}
+
+    context = {'product':product, 'seller':seller.pk, 'avg_rating':avg_rating, 'related':related, 'user':user}
     return render(request, 'store/product.html', context)
 
 def product_review(request, product_id): ## VTR1 Done.
@@ -188,6 +189,20 @@ def seller_reviews(request, seller_id): ## VTR1 Done.
     reviews = SellerReview.objects.all().filter(seller=seller_id).order_by('-rating')
     context = {'reviews': reviews, 'seller': seller.seller_name, 'user':user}
     return render(request, 'store/seller_review.html', context)
+
+def store_reviews(request): ## VTR1 Done.
+    """
+    Displays all store reviews ordered by time_stamp.
+    """
+    try:
+        if user is None:
+            return HttpResponseRedirect('/shop/login/')
+    except:
+        return HttpResponseRedirect('/shop/login/')
+    
+    store_reviews = StoreReview.objects.all()
+    context = {'store_reviews':store_reviews, 'user':user}
+    return render(request, 'store/store_reviews.html', context)
 
 def place_order(request, product_id): ## VTR1 Done.
     """
