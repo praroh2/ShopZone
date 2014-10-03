@@ -6,8 +6,8 @@ from store.models import Product, ProductReview, Seller, SellerReview, StoreRevi
 from store.models import Order, Customer
 
 import re
-user = authenticate(username='Abhay', password='cmr') ## Use this while debugging.
-##user = None ## Use this to force a login.
+##user = authenticate(username='Abhay', password='cmr') ## Use this while debugging.
+user = None ## Use this to force a login.
 
 def calculate_average_rating(reviews): ## TR1 Done.
     """
