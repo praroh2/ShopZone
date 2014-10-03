@@ -1,0 +1,57 @@
+<h1 align="center" style="color:#663399">ShopZone : The Online Retail Store</h1>
+<h2 align="center" style="color:#336699">Product Details </h2>
+
+{% if product and seller and related %}
+	<div style="border:1px solid black">
+		<div align="center" style="border: 1px solid red; width:500px;">
+			<div style="width:500px; border: 1px solid blue;">
+				<table style="font-size:1.25em">
+					<tr>
+						<td> Product Name: <td>
+						<td> {{ product.product_name }} </td>
+					</tr>
+					<tr>
+						<td> Price: <td>
+						<td> Rs. {{ product.price }} </td>
+					</tr>
+					<tr>
+						<td> Description: <td>
+						<td> {{ product.description }} </td>
+					</tr>
+					<tr>
+						<td> Average Rating: <td>
+						{% if avg_rating %}
+							<td> {{ avg_rating }} </td>
+						{% else %}
+							<td> 0.0 </td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td> Category: <td>
+						<td> {{ product.category }} </td>
+					</tr>
+					<tr>
+						<td> Seller: <td>
+						<td> <a href="http://localhost:8000/shop/seller/{{ seller }}/"> {{ product.seller }} </a></td>
+					</tr>
+					<tr>
+						<td> Reviews: <td>
+						<td> <a href="/shop/{{ product.id }}/productreviews/">{{ product.product_name }}</td>
+					</tr>
+				</table>
+			</div>
+			
+			<div style="width:500px; border: 1px solid yellow;">
+				<a href= "/shop/place_order/{{ product.id }}/" ><p align=center style="color:#006600; font-size:1.5em;">Place order</p></a>
+			</div>
+			
+			<div style="border:1px solid red; float:left; width:500px; heigth:1px; background-color:#ffff00; overflow:scroll;">
+				<p>hello world</p>
+			</div>
+		</div>
+
+	</div>
+
+{% else %}
+	<p>Invalid Product ID.</p>
+{% endif %}

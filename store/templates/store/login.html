@@ -1,0 +1,40 @@
+<html>
+
+	<head>
+		<title>ShopZone | Login</title>
+	</head>
+	<style type="text/css">
+		a:link{
+			text-decoration:none
+		}
+		a:hover {
+			background-color: #ddd;
+		}
+	</style>
+
+	<body link="#663399" vlink="#663399" alink="#808080" bgcolor="#eee">
+		
+		<div align="center" style="height:50px; width:100%;
+			font-size:1em; color:#663399; 
+			padding-bottom:30px; margin-bottom:20px;">
+		
+			<h1>ShopZone : The Online Retail Store</h1>
+			<h2>Login</h2>
+		</div>
+
+		<div align="center" style="padding-top:150px;">
+			<form action="/shop/login_okay/" method = "post">
+				{% csrf_token %}
+				<table style=" color:#663399;">
+					<tr>
+						<td>Username: </td>
+						<td><input type = "text" name="username" /> </td>
+					</tr>
+					<tr>
+						<td>Password: </td>
+						<td><input type = "password" name="password" /> </td>
+					</tr>
+				</table>
+				<input type="submit" value="Login"/>
+			</form>
+		</div>

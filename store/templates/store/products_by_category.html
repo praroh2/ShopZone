@@ -1,0 +1,99 @@
+<html>
+	<head>
+		<title> ShopZone | ShopZone Reviews </title>
+	</head>
+	
+	<style>
+		a:link{
+			text-decoration:none
+		}
+		a:hover {
+			background-color: #DDDDDD;
+		}
+		.title:hover{
+			background-color: #FFFFFF;
+		}
+		.headdiv {
+			height:1px;
+			width:100%;
+			font-size:1em;
+			text-align:center;
+			color:#663399;
+			padding-bottom:30px;
+			margin-bottom:20px;
+		}
+		.headdiv2 {
+			height:10px;
+			width:100%;
+			font-size:1.5em;
+			text-align:center;
+			color:#663399;
+			border-bottom:1px dotted black;
+			padding-bottom:30px;
+			margin-bottom:20px;
+		}
+		.linkdiv:hover {
+			background-color: #DDDDDD;
+		}
+	</style>
+
+	<body link="#663399" vlink="#663399" alink="#808080">
+		<!-- Heading -->
+		<div class="headdiv">
+			<h1><a href="/" class="title">ShopZone : The Online Retail Store</a></h1>
+		</div>
+
+		<!-- Just below the heading :p -->
+		<div class="headdiv2">
+
+			<div align="left" style="float:left">
+				<a href="/shop/all/">All Products</a>
+			</div>
+
+			<div align="centre" style="float:left; margin-left:200px;">
+				<form action="/shop/by_search/" method="POST">
+					{% csrf_token %}
+					<input type="text" name="product" value="Search by product name, seller name or category!" size="100px"/>
+					<input type="submit" value="Search"/>
+				</form>
+			</div>
+
+			<div align="left" style="float:right">
+				Welcome <a href="/shop/my_orders/"> {{ user.username }} </a>
+			</div>
+
+		</div>
+
+		<!-- Search results / category -->
+		<div>
+			<h2 align="center" style="color:#336699">
+			{% if from_search %}
+				Search results for : {{ product_category }}
+			{% else %}
+				Category : {{ product_category }}
+			{% endif %} </h2>
+		</div>
+
+		<!-- Actual content -->
+		<div style="font-size:1.5em;"> 
+			{% if all_products_list %}
+				<table align="center" style="font-size:1em;" border=0>
+					<tr align="center">
+						<th style="width:500px;">Product</th>
+						<th style="padding-left:20px; width:300px;">Seller</th>
+						<th style="padding-left:20px; width:200px;">Price</th>
+					</tr>
+					{% for product in all_products_list %}
+						<tr align="center">
+							<td> <a href="/shop/{{ product.id }}/"><div class="linkdiv">{{ product.product_name }}</a></div></td>
+							<td style="padding-left:20px"><a href="/shop/seller/{{ product.seller.pk }}/"><div class="linkdiv">{{ product.seller }}</a></div></td>
+							<td style="padding-left:20px"> {{ product.price }} </td>
+						</tr>
+					{% endfor %}
+				</table>
+			{% else %}
+				<p>No products are available.</p>
+			{% endif %}
+		</div>
+
+</html>

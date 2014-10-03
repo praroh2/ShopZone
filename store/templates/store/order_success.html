@@ -1,0 +1,100 @@
+<html>
+	<head>
+		<title> ShopZone | ShopZone Reviews </title>
+	</head>
+	
+	<style>
+		a:link{
+			text-decoration:none
+		}
+		a:hover {
+			background-color: #DDDDDD;
+		}
+		.title:hover{
+			background-color: #FFFFFF;
+		}
+		.headdiv {
+			height:1px;
+			width:100%;
+			font-size:1em;
+			text-align:center;
+			color:#663399;
+			padding-bottom:30px;
+			margin-bottom:20px;
+		}
+		.headdiv2 {
+			height:10px;
+			width:100%;
+			font-size:1.5em;
+			text-align:center;
+			color:#663399;
+			border-bottom:1px dotted black;
+			padding-bottom:30px;
+			margin-bottom:20px;
+		}
+		.linkdiv:hover {
+			background-color: #DDDDDD;
+		}
+	</style>
+
+	<body link="#663399" vlink="#663399" alink="#808080">
+		<!-- Heading -->
+		<div class="headdiv">
+			<h1><a href="/" class="title">ShopZone : The Online Retail Store</a></h1>
+		</div>
+
+		<!-- Just below the heading :p -->
+		<div class="headdiv2">
+
+			<div align="left" style="float:left">
+				<a href="/shop/all/">All Products</a>
+			</div>
+
+			<div align="centre" style="float:left; margin-left:200px;">
+				<form action="/shop/by_search/" method="POST">
+					{% csrf_token %}
+					<input type="text" name="product" value="Search by product name, seller name or category!" size="100px"/>
+					<input type="submit" value="Search"/>
+				</form>
+			</div>
+
+			<div align="left" style="float:right">
+				Welcome <a href="/shop/my_orders/"> {{ user.username }} </a>
+			</div>
+
+		</div>
+
+		<div>
+			<h2 align="center" style="color:#336699">Order Placed</h2>
+		</div>
+
+		<div align="center">
+			{% if customer and product and time_of_order and payment_type %}
+				<table style="font-size:1.25em;">
+					<tr align="center">
+						<td> Product Name: </td>
+						<td style="padding-left:50px"> {{ product }} </td>
+					</tr>
+					<tr align="center">
+						<td> Customer: </td>
+						<td style="padding-left:50px"> {{ customer }}</td>
+					</tr>
+					<tr align="center">
+						<td> Mode of payment: </td>
+						<td style="padding-left:50px"> {{ payment_type }}</td>
+					</tr>
+					<tr align="center">
+						<td> Order placed at: </td>
+						<td style="padding-left:50px"> {{ time_of_order }}</td>
+					</tr>
+				</table>
+				
+				<div>
+					<a href="/shop/"><p align=center style="color:#006600; font-size:1.5em;">Continue Shopping</p></a>
+				</div>
+			{% else %}
+				Error!!
+			{% endif %}
+		</div>
+	</body>
+</html>
