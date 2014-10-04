@@ -5,9 +5,10 @@ from django.contrib.auth import authenticate, login
 from store.models import Product, ProductReview, Seller, SellerReview, StoreReview
 from store.models import Order, Customer
 
+
 import re
-##user = authenticate(username='Abhay', password='cmr') ## Use this while debugging.
-user = None ## Use this to force a login.
+user = authenticate(username='Abhay', password='cmr') ## Use this while debugging.
+##user = None ## Use this to force a login.
 
 def calculate_average_rating(reviews): ## TR1 Done.
     """
@@ -270,9 +271,84 @@ def my_orders(request): ## VTR1 Done.
     context = {'user':user, 'orders':orders}
     return render(request, 'store/my_orders.html', context)
 
+def my_order_pdf(request, order_id): ## TR2 Done.
+    """
+    Generate a PDF of one order.
+    """
+    try:
+        if user is None:
+            return HttpResponseRedirect('/shop/login/')
+    except:
+        return HttpResponseRedirect('/shop/login/')
+
+    strt1 = 70 ## Table x val's
+    strt2 = 250
+    order = Order.objects.get(pk = order_id)
+    
+    from reportlab.pdfgen import canvas
+    response = HttpResponse(content_type='application/pdf')
+    response['Content_Disposition'] = 'attachment; filename="somefilename.pdf"'
+
+    p = canvas.Canvas(response)
+    p.setFont("Helvetica", 35)
+    p.setFillColorRGB(0.2, 0.1, 0.3)
+    p.drawString(215, 750, "ShopZone")
+    p.setFillColorRGB(0.1, 0.2, 0.3)
+    p.setFont("Helvetica", 27)
+    p.drawString(216, 700, "Order Details")
+    p.grid([60, 240, 540], [650, 625, 600, 575, 550, 525, 500, 475])
+    p.setFont("Helvetica", 17)
+    p.setFillColorRGB(0, 0, 0)
+    
+    p.drawString(strt1, 630, "Customer Name:")
+    p.drawString(strt1, 605, "Order ID:")
+    p.drawString(strt1, 580, "Product:")
+    p.drawString(strt1, 555, "Price:")
+    p.drawString(strt1, 530, "Mode of Payment:")
+    p.drawString(strt1, 505, "Status:")
+    p.drawString(strt1, 480, "Status Change Time:")
+
+    p.drawString(strt2, 630, str(user.username))
+    p.drawString(strt2, 605, str(order.id))
+    p.drawString(strt2, 580, str(order.product))
+    p.drawString(strt2, 555, str(order.product.price))
+    if order.payment_type == 1:
+        p.drawString(strt2, 530, "Paid from Store Credit")
+    else:
+        p.drawString(strt2, 530, "Cash on Delivery")
+    if order.status == 1:
+        p.drawString(strt2, 505, "New")
+    elif order.status == 2:
+        p.drawString(strt2, 505, "Shipping")
+    elif order.status == 3:
+        p.drawString(strt2, 505, "Delivered")
+    elif order.status == 4:
+        p.drawString(strt2, 505, "Returned")
+    elif order.status == 5:
+        p.drawString(strt2, 505, "Cancelled")
+    p.drawString(strt2, 480, str(order.status_change_time))    
+    
+    p.showPage()
+    p.save()
+    return response
+
+def add_product_review(request, product_id):
+    rating = int(request.POST['rating'])
+    review = request.POST['review']
+    product_review = ProductReview(product = Product.objects.get(pk=product_id), rating = rating, review = review)
+    product_review.save()
+    link = '/shop/' + str(product_id) + '/productreviews/'
+    return HttpResponseRedirect(link)
+
 def test(request):
-    user = authenticate(username='CustomerOne', password='cmr')
-    users = [user]
-    customer = Customer.objects.all().filter(customer_name=user.username)
-    return render(request, 'store/test.html', {'customer':customer,
-                                               'users':users})
+    from reportlab.pdfgen import canvas
+    response = HttpResponse(content_type='application/pdf')
+    response['Content_Disposition'] = 'attachment; filename="somefilename.pdf"'
+
+    p = canvas.Canvas(response)
+    p.drawString(250, 800, "Order Details")
+    p.drawString(200, 750, "Username: " + user.username)
+    p.drawString(200, 700, "User id: " + str(user.pk))
+    p.showPage()
+    p.save()
+    return response

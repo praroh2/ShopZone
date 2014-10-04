@@ -42,8 +42,8 @@
 			font-size:1.25em;
 			color:#663399;
 			overflow:scroll;
-			float:left;
-			border-left:50px solid white;
+			float:right;
+			border-left:1px dotted black;
 		}
 	</style>
 
@@ -114,6 +114,22 @@
 
 				<div>
 					<a href= "/shop/place_order/{{ product.id }}/" ><p align=center style="color:#006600; font-size:1.5em;">Place order</p></a>
+				</div>
+
+				<div align="center">
+						Have an opinion about this product? Share it with us!<br/>
+						<form method="post" action="/shop/{{ product.id }}/productreviews/add/" target="_blank">
+							{% csrf_token %}
+							<input type="radio" name="rating" value="1">1
+							<input type="radio" name="rating" value="2">2
+							<input type="radio" name="rating" value="3">3
+							<input type="radio" name="rating" value="4">4
+							<input type="radio" name="rating" value="5" checked>5<br>
+							<!-- <input type="text" name="review" value="Add review" size="70%" style="height:50px;"> -->
+							<textarea name="review" rows="4" cols="70">Review</textarea><br/>
+							<input type="submit" value="Add review">
+						</form>
+							
 				</div>
 			</div>
 
