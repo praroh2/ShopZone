@@ -74,11 +74,13 @@
 					<tr>
 						<th style="min-width:100px;"> Rating </th>
 						<th style="min-width:800px;"> Review </th>
+						<th style="min-width:100px;"> SA </th>
 					</tr>
 					{% for review in reviews %}
 					<tr>
 						<td align=center> {{ review.rating }} </td>
 						<td align=center> {{ review.review }} </td>
+						<td align=center> {{ review.sentiment }} </td>
 					</tr>
 					{% endfor %}
 				</table>

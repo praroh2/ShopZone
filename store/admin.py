@@ -4,12 +4,12 @@ from store.models import Seller, SellerReview, Product, ProductReview, StoreRevi
 from store.models import Customer, Order #, Payment
 
 class StoreReviewAdmin(admin.ModelAdmin):
-    list_display = ('rating', 'review')
+    list_display = ('rating', 'review', 'time_stamp', 'sentiment')
     search_fields = ['review']
     list_filter = ['rating']
 
 class SellerReviewAdmin(admin.ModelAdmin):
-    list_display = ('seller', 'rating', 'review')
+    list_display = ('seller', 'rating', 'review', 'time_stamp', 'sentiment')
     search_fields = ['seller__seller_name']
     list_filter = ['seller', 'rating']
 
@@ -27,7 +27,7 @@ class CustomerAdmin(admin.ModelAdmin):
     search_fields = ['customer_name']
 
 class ProductReviewAdmin(admin.ModelAdmin):
-    list_display = ['product', 'rating', 'review']
+    list_display = ['product', 'rating', 'review', 'time_stamp', 'sentiment']
     search_fields = ['product']
     list_filter = ['rating']
 

@@ -5,8 +5,11 @@ from django.contrib.auth import authenticate, login
 from store.models import Product, ProductReview, Seller, SellerReview, StoreReview
 from store.models import Order, Customer
 
+from store import AFINN
 
 import re
+
+
 user = authenticate(username='Abhay', password='cmr') ## Use this while debugging.
 ##user = None ## Use this to force a login.
 
@@ -20,6 +23,18 @@ def calculate_average_rating(reviews): ## TR1 Done.
             avg_rating += review.rating
         avg_rating = round(avg_rating / len(reviews), 2)
     return avg_rating
+
+def setiment_analyser(review): ## TR2 Done.
+    """
+    Calculates a numerical value to represent the sentiment of a given
+    review with the help of AFINN-111.txt.
+    """
+    review = review.lower()
+    sentiment = 0
+    for i in review.split(' '):
+        if i in AFINN.vals.keys():
+            sentiment += int(AFINN.vals[i])
+    return sentiment
 
 def login_page(request): ## VTR1 Re-do.
     """
@@ -57,7 +72,7 @@ def home_page(request): ## VTR1 Done.
         return HttpResponseRedirect('/shop/login/')
 
     ## Get Products, categories and store reviews.
-    all_products_list = Product.objects.all().order_by('product_name')[:10]
+    all_products_list = Product.objects.all().order_by('-number_sold')
     categories = set([product.category for product in all_products_list])
     store_review = StoreReview.objects.all().order_by('time_stamp')[:10]
     context = {'all_products_list':all_products_list, 'categories':categories, 'store_review':store_review, 'user':user}
@@ -156,7 +171,7 @@ def product_review(request, product_id): ## VTR1 Done.
         return HttpResponseRedirect('/shop/login/')
     
     product = Product.objects.get(pk=product_id)
-    reviews = ProductReview.objects.all().filter(product=product_id).order_by('-rating')
+    reviews = ProductReview.objects.all().filter(product=product_id).order_by('-sentiment')
     context = {'reviews': reviews, 'product': product.product_name, 'user':user}
     return render(request, 'store/product_review.html', context)
 
@@ -335,20 +350,25 @@ def my_order_pdf(request, order_id): ## TR2 Done.
 def add_product_review(request, product_id):
     rating = int(request.POST['rating'])
     review = request.POST['review']
-    product_review = ProductReview(product = Product.objects.get(pk=product_id), rating = rating, review = review)
-    product_review.save()
-    link = '/shop/' + str(product_id) + '/productreviews/'
+    if review != "Review":
+        sentiment = setiment_analyser(review)
+        product_review = ProductReview(product = Product.objects.get(pk=product_id), rating = rating, review = review,
+            sentiment = sentiment, time_stamp = timezone.now())
+        product_review.save()
+        link = '/shop/' + str(product_id) + '/productreviews/'
+        return HttpResponseRedirect(link)
+    else:
+        return HttpResponse("Please type a review")
+
+def add_seller_review(request, seller_id):
+    rating = int(request.POST['rating'])
+    review = request.POST['review']
+    sentiment = setiment_analyser(review)
+    seller_review = SellerReview(seller = Seller.objects.get(pk=product_id), rating = rating, review = review,
+        sentiment = sentiment, time_stamp = timezone.now())
+    seller_review.save()
+    link = '/shop/' + str(seller_id) + '/sellerreviews/'
     return HttpResponseRedirect(link)
 
 def test(request):
-    from reportlab.pdfgen import canvas
-    response = HttpResponse(content_type='application/pdf')
-    response['Content_Disposition'] = 'attachment; filename="somefilename.pdf"'
-
-    p = canvas.Canvas(response)
-    p.drawString(250, 800, "Order Details")
-    p.drawString(200, 750, "Username: " + user.username)
-    p.drawString(200, 700, "User id: " + str(user.pk))
-    p.showPage()
-    p.save()
-    return response
+    return HttpResponse(str(sys.path))

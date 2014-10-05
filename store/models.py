@@ -12,6 +12,7 @@ class StoreReview(models.Model):
         )
     review = models.CharField(max_length=50)
     rating = models.IntegerField(default=3, choices=RATING_LEVELS)
+    sentiment = models.IntegerField(default=0)
     time_stamp = models.DateTimeField('Date-time')
     def __str__(self):
         if len(self.review) > 18:
@@ -39,6 +40,8 @@ class SellerReview(models.Model):
     seller = models.ForeignKey(Seller)
     review = models.CharField(max_length=50)
     rating = models.IntegerField(default=3, choices=RATING_LEVELS)
+    sentiment = models.IntegerField(default=0)
+    time_stamp = models.DateTimeField('Date-time')
     def __str__(self):
         if len(self.review) > 18:
             temp = self.review[:15] + '...'
@@ -55,6 +58,7 @@ class SellerReview(models.Model):
 
 class Product(models.Model):
     product_name = models.CharField(max_length=30)
+    number_sold = models.IntegerField(default=0)
     price = models.IntegerField(default=0)
     category = models.CharField(max_length=20)
     description = models.CharField(max_length=50)
@@ -73,6 +77,8 @@ class ProductReview(models.Model):
     product = models.ForeignKey(Product)
     review = models.CharField(max_length=50)
     rating = models.IntegerField(default=3, choices=RATING_LEVELS)
+    sentiment = models.IntegerField(default=0)
+    time_stamp = models.DateTimeField('Date-time')
     def __str__(self):
         if len(self.review) > 18:
             temp = self.review[:15] + '...'
