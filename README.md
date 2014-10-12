@@ -7,10 +7,10 @@ Site under construction.
 
 Check the screenshots to familiarize yourself with the store.
 
-Admin login:
+#Admin login:
 	Username: bn
 	Password: bn
 
-User login:
+#User login:
 	Username: Abhay
 	Password: cmr
