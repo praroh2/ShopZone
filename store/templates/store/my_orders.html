@@ -103,6 +103,8 @@
 
 					{% if i.status == 5 %}
 						<td> <a href="/shop/cancel_order/{{ i.pk }}" target="_blank"><div class="linkdiv"> Cancel </div></a></td>
+					{% elif i.status == 3 %}
+						<td> <a href="/shop/cancel_order/{{ i.pk }}" target="_blank"><div class="linkdiv"> Cancel </div></a></td>
 					{% else %}
 						<td> <a href="/shop/cancel_order/{{ i.pk }}"><div class="linkdiv"> Cancel </div></a></td>
 					{% endif %}
