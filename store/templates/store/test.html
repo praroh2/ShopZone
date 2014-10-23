@@ -1,10 +1,9 @@
-{% for i in customer %}
-	{{ i.customer_name }}<br/>
-	{{ i.pk }}<br/>
+{% for j, k in sub_categories.items %}
+	{% if j in "Books" %}
+		{% for i in k %}
+			{{ j }} {{ i }}<br/>
+		{% endfor %}
+	{% else %}
+		{{ j }}
+	{% endif %}
 {% endfor %}
-<br/><br/><br/>
-{% for i in users %}
-	{{ i.username }}<br/>
-	{{ i.pk }}<br/>
-{% endfor %}
-

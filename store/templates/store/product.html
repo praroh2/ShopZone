@@ -78,10 +78,9 @@
 			<h2 align="center" style="color:#336699">Product Details</h2>
 		</div>
 
-		<!-- <div style="width:100%; heigth:200px; border:1px solid black;"> -->
 		{% if product %}
 			<div style="width:49%; heigth:200px; float:left;">
-				<table align="center" style="font-size:1.25em;">
+				<table align="center" style="font-size:1.1em;">
 					<tr align="center">
 						<td width="30%"> Name: </td>
 						<td width="70%"> {{ product }} </td>
@@ -96,6 +95,10 @@
 					</tr>
 					<tr align="center">
 						<td> Category: </td>
+						<td> {{ product.category.category }} </td>
+					</tr>
+					<tr align="center">
+						<td> Sub category: </td>
 						<td> {{ product.category }} </td>
 					</tr>
 					<tr align="center">
@@ -138,7 +141,6 @@
 			</div>
 
 		{% endif %}
-
 		{% if related %}
 			<div class="columns">
 				<div>

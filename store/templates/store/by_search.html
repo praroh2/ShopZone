@@ -76,14 +76,18 @@
 
 		<!-- Actual content -->
 		<div style="font-size:1.5em;"> 
-			{% if sub_categories %}
+			{% if all_products_list %}
 				<table align="center" style="font-size:1em;" border=0>
 					<tr align="center">
-						<th style="width:500px;">Product Sub-categories</th>
+						<th style="width:500px;">Product</th>
+						<th style="padding-left:20px; width:300px;">Seller</th>
+						<th style="padding-left:20px; width:200px;">Price</th>
 					</tr>
-					{% for sub in sub_categories %}
+					{% for product in all_products_list %}
 						<tr align="center">
-							<td> <a href="/shop/by_search/{{ sub }}"><div class="linkdiv">{{ sub }}</a></div></td>
+							<td> <a href="/shop/{{ product.id }}/"><div class="linkdiv">{{ product.product_name }}</a></div></td>
+							<td style="padding-left:20px"><a href="/shop/seller/{{ product.seller.pk }}/"><div class="linkdiv">{{ product.seller }}</a></div></td>
+							<td style="padding-left:20px"> {{ product.price }} </td>
 						</tr>
 					{% endfor %}
 				</table>

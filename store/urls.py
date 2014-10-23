@@ -24,5 +24,6 @@ urlpatterns = patterns('',
     url(r'^(?P<product_id>\d+)/$', views.product),
     
     url(r'^by_search/$', views.by_search),
+    url(r'^by_search/(?P<sub_category>\w+)/$', views.search),
     url(r'^(?P<product_category>\w+)/$', views.by_category),
     )

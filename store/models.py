@@ -56,12 +56,25 @@ class SellerReview(models.Model):
 ##    def __str__(self):
 ##        return str(self.seller) + ' - ' + str(self.clearance_time)
 
+class Category(models.Model):
+    category_name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.category_name
+
+class SubCategory(models.Model):
+    sub_category_name = models.CharField(max_length=20)
+    category = models.ForeignKey(Category)
+    
+    def __str__(self):
+        return self.sub_category_name
+
 class Product(models.Model):
     product_name = models.CharField(max_length=30)
     number_sold = models.IntegerField(default=0)
     price = models.IntegerField(default=0)
-    category = models.CharField(max_length=20)
     description = models.CharField(max_length=50)
+    category = models.ForeignKey(SubCategory)
     seller = models.ForeignKey(Seller)
     def __str__(self):
         return self.product_name

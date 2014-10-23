@@ -1,15 +1,21 @@
 from django.contrib import admin
 
 from store.models import Seller, SellerReview, Product, ProductReview, StoreReview
-from store.models import Customer, Order #, Payment
+from store.models import Customer, Order, Category, SubCategory
+
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'category_name']
+
+class SubCategoryAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'category', 'sub_category_name']
 
 class StoreReviewAdmin(admin.ModelAdmin):
-    list_display = ('rating', 'review', 'time_stamp', 'sentiment')
+    list_display = ['rating', 'review', 'time_stamp', 'sentiment']
     search_fields = ['review']
     list_filter = ['rating']
 
 class SellerReviewAdmin(admin.ModelAdmin):
-    list_display = ('seller', 'rating', 'review', 'time_stamp', 'sentiment')
+    list_display = ['seller', 'rating', 'review', 'time_stamp', 'sentiment']
     search_fields = ['seller__seller_name']
     list_filter = ['seller', 'rating']
 
@@ -37,6 +43,8 @@ class ProductAdmin(admin.ModelAdmin):
 ##    list_filter = ['price']
 
 # Register your models here.
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(SubCategory, SubCategoryAdmin)
 admin.site.register(StoreReview, StoreReviewAdmin)
 admin.site.register(Seller, SellerAdmin)
 admin.site.register(SellerReview, SellerReviewAdmin)
@@ -44,4 +52,3 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductReview, ProductReviewAdmin)
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Order, OrderAdmin)
-##admin.site.register(Payment)

@@ -7,10 +7,10 @@ from store.models import Order, Customer
 
 from store import AFINN
 
-import re
+import re, random
 
 
-user = authenticate(username='Abhay', password='cmr') ## Use this while debugging.
+user = authenticate(username='Surya', password='cmr') ## Use this while debugging.
 ##user = None ## Use this to force a login.
 
 def calculate_average_rating(reviews): ## TR1 Done.
@@ -35,6 +35,21 @@ def setiment_analyser(review): ## TR2 Done.
         if i in AFINN.vals.keys():
             sentiment += int(AFINN.vals[i])
     return sentiment
+
+def check_match(pattern, i): ## T2 Done.
+    """
+    Takes a pattern and a product object. Returns true if the pattern can
+    be found in the name, seller, category or sub category.
+    """
+    if re.search(pattern, i.product_name) is not None:
+        return True
+    if re.search(pattern, i.seller.seller_name) is not None:
+        return True
+    if re.search(pattern, i.category.category.category_name) is not None:
+        return True
+    if re.search(pattern, i.category.sub_category_name) is not None:
+        return True
+    return False
 
 def login_page(request): ## VTR1 Re-do.
     """
@@ -73,12 +88,13 @@ def home_page(request): ## VTR1 Done.
 
     ## Get Products, categories and store reviews.
     all_products_list = Product.objects.all().order_by('-number_sold')
-    categories = set([product.category for product in all_products_list])
+    categories = set([product.category.category for product in all_products_list])
+
     store_review = StoreReview.objects.all().order_by('time_stamp')[:10]
     context = {'all_products_list':all_products_list, 'categories':categories, 'store_review':store_review, 'user':user}
     return render(request, 'store/home_page.html', context)
 
-def by_search(request): ## VTR1 Done.
+def by_search(request): ## T2 Done.
     """
     Using the search bar leads you here!
     """
@@ -87,27 +103,38 @@ def by_search(request): ## VTR1 Done.
             return HttpResponseRedirect('/shop/login/')
     except:
         return HttpResponseRedirect('/shop/login/')
-    
-    products = Product.objects.all().order_by('product_name')
     name = request.POST['product']
-    pattern = ""
-    for i in name:
-        pattern += '[' + i.lower() + i.upper() + ']'
+    return HttpResponseRedirect('/shop/by_search/'+name)
 
+def search(request, sub_category): ##T2 done.
+    try:
+        if user is None:
+            return HttpResponseRedirect('/shop/login/')
+    except:
+        return HttpResponseRedirect('/shop/login/')
+
+    products = Product.objects.all().order_by('product_name')
+    pattern = ""
+    for i in sub_category:
+        pattern += '[' + i.lower() + i.upper() + ']'
     ## This name has has been chosen so that I can
     ## reuse the template product_by_category
+    ## ^^ is no longer applicable, but the name stays!
     all_products_list = []
     for i in products:
-        if re.search(pattern, i.product_name) is not None or re.search(pattern, i.seller.seller_name) is not None or re.search(pattern, i.category) is not None:
+        if check_match(pattern, i) == True:
             all_products_list.append(i)
     
+    if sub_category == "all":
+        all_products_list = Product.objects.all()
+
     context = {'all_products_list':all_products_list,
-               'product_category':name,
+               'product_category':sub_category,
                'from_search':True,
                'user':user}
-    return render(request, 'store/by_category.html', context)
-
-def by_category(request, product_category): ## VTR1 Done.
+    return render(request, 'store/by_search.html', context)
+    
+def by_category(request, product_category): ## T2 Done.
     """
     Displays products by category.
     """
@@ -117,17 +144,15 @@ def by_category(request, product_category): ## VTR1 Done.
     except:
         return HttpResponseRedirect('/shop/login/')
 
+    if product_category == "all":
+        return HttpResponseRedirect(request, '/shop/by_search/all/')
     product_category = product_category[0].upper() + product_category[1:].lower()
-    if product_category == 'All':
-        all_products_list = Product.objects.all().order_by('product_name')
-    else:
-        all_products_list = Product.objects.all().filter(category=product_category).order_by('product_name')
-    context = {'all_products_list':all_products_list,
-               'product_category':product_category,
-               'user':user}
+    all_products_list = Product.objects.all()
+    sub_categories = [i.category for i in all_products_list if i.category.category.category_name == product_category]
+    context = {'sub_categories': sub_categories, 'product_category': product_category}
     return render(request, 'store/by_category.html', context)
 
-def product(request, product_id): ## VTR2-- Done.
+def product(request, product_id): ## T2 Done.
     """
     Displays a particular products' details.
     """
@@ -144,7 +169,11 @@ def product(request, product_id): ## VTR2-- Done.
 
     ## Related product suggestions.
     related1 = Product.objects.all().filter(seller=product.seller)
-    related2 = Product.objects.all().filter(category=product.category)
+    temp = list(Product.objects.all())
+    related2 = []
+    for i in temp:
+        if i.category.category == product.category.category:
+            related2.append(i)
     related = []
     for Li in related1:
         if Li != product:
@@ -371,4 +400,14 @@ def add_seller_review(request, seller_id):
     return HttpResponseRedirect(link)
 
 def test(request):
-    return HttpResponse(str(sys.path))
+    all_products_list = Product.objects.all().order_by('-number_sold')
+    
+    sub_categories = dict()
+    for product in all_products_list:
+        if product.category.category in sub_categories:
+            sub_categories[product.category.category].add(product.category)
+        else:
+            sub_categories[product.category.category] = set([product.category])
+    l = [i.category for i in all_products_list]
+    context = {'sub_categories':sub_categories, 'all_products_list': all_products_list, 'l':l}
+    return render(request, 'store/test.html', context)

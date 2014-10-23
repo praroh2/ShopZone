@@ -34,8 +34,11 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+##DEBUG = False
+##
+##TEMPLATE_DEBUG = False
 
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
