@@ -1,0 +1,25 @@
+<body link="#663399" vlink="#663399" alink="#808080">
+	<!-- Heading -->
+	<div class="headdiv">
+		<h1><a href="/" class="title">ShopZone : The Online Retail Store</a></h1>
+	</div>
+
+	<!-- Just below the heading :p -->
+	<div class="headdiv2">
+		<div align="left" style="float:left">
+			<a href="/shop/by_search/all/">All Products</a>
+		</div>
+
+		<div align="centre" style="float:left; margin-left:70px;">
+			<form action="/shop/by_search/" method="POST">
+				{% csrf_token %}
+				<input type="text" name="product" value="Search by product name, seller name or category!" size="100px"/>
+				<input type="submit" value="Search"/>
+			</form>
+		</div>
+
+		<div align="left" style="float:right">
+			Welcome <a href="/shop/my_orders/"> {{ user.username }} </a>
+		</div>
+
+	</div>
