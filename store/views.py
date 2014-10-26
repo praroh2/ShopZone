@@ -87,7 +87,7 @@ def home_page(request): ## VTR1 Done.
         return HttpResponseRedirect('/shop/login/')
 
     ## Get Products, categories and store reviews.
-    all_products_list = Product.objects.all().order_by('-number_sold')
+    all_products_list = Product.objects.raw("select * from store_Product order by number_sold")#all().order_by('-number_sold')
     categories = set([product.category.category for product in all_products_list])
 
     store_review = StoreReview.objects.all().order_by('time_stamp')[:10]
@@ -117,8 +117,8 @@ def search(request, sub_category): ##T2 done.
     pattern = ""
     for i in sub_category:
         pattern += '[' + i.lower() + i.upper() + ']'
-    ## This name has has been chosen so that I can
-    ## reuse the template product_by_category
+    ## This name (all_products_list) has has been chosen
+    ## so that I can reuse the template product_by_category
     ## ^^ is no longer applicable, but the name stays!
     all_products_list = []
     for i in products:
@@ -144,8 +144,6 @@ def by_category(request, product_category): ## T2 Done.
     except:
         return HttpResponseRedirect('/shop/login/')
 
-    if product_category == "all":
-        return HttpResponseRedirect(request, '/shop/by_search/all/')
     product_category = product_category[0].upper() + product_category[1:].lower()
     all_products_list = Product.objects.all()
     sub_categories = [i.category for i in all_products_list if i.category.category.category_name == product_category]
