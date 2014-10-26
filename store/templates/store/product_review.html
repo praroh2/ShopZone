@@ -3,66 +3,9 @@
 		<title> ShopZone | Product Reviews </title>
 	</head>
 	
-	<style>
-		a:link{
-			text-decoration:none
-		}
-		a:hover {
-			background-color: #DDDDDD;
-		}
-		.title:hover{
-			background-color: #FFFFFF;
-		}
-		.headdiv {
-			height:1px;
-			width:100%;
-			font-size:1em;
-			text-align:center;
-			color:#663399;
-			padding-bottom:30px;
-			margin-bottom:20px;
-		}
-		.headdiv2 {
-			height:10px;
-			width:100%;
-			font-size:1.5em;
-			text-align:center;
-			color:#663399;
-			border-bottom:1px dotted black;
-			padding-bottom:30px;
-			margin-bottom:20px;
-		}
-		.linkdiv:hover {
-			background-color: #DDDDDD;
-		}
-	</style>
+	{% include "store/style.html" %}
 
-	<body link="#663399" vlink="#663399" alink="#808080">
-		<!-- Heading -->
-		<div class="headdiv">
-			<h1><a href="/" class="title">ShopZone : The Online Retail Store</a></h1>
-		</div>
-
-		<!-- Just below the heading :p -->
-		<div class="headdiv2">
-
-			<div align="left" style="float:left">
-				<a href="/shop/all/">All Products</a>
-			</div>
-
-			<div align="centre" style="float:left; margin-left:200px;">
-				<form action="/shop/by_search/" method="POST">
-					{% csrf_token %}
-					<input type="text" name="product" value="Search by product name, seller name or category!" size="100px"/>
-					<input type="submit" value="Search"/>
-				</form>
-			</div>
-
-			<div align="left" style="float:right">
-				Welcome <a href="/shop/my_orders/"> {{ user.username }} </a>
-			</div>
-
-		</div>
+	{% include "store/top.html" %}
 
 		<div>
 			<h2 align="center" style="color:#336699">Reviews : {{ product }}</h2>
@@ -92,5 +35,4 @@
 		<div style="border-left: 50px solid white;">
 			<p align:center style="font-size:1.15em"> Have an opinion about this product? &nbsp;<a href="/admin/store/productreview/add/">Share it with us!</a></p>
 		</div>
-	</body>
-</html>
+	{% include "store/bottom.html" %}
