@@ -67,5 +67,15 @@
 				</form>
 			</div>
 		</div>
-	</body>
-</html>
+		{% if errors %}
+			<div>
+				You made the following errors:
+				<ul>
+					{% for e in errors %}
+						<li>{{ e }}</li>
+					{% endfor %}
+				</ul>
+			<div>
+		{% endif %}
+
+	{% include "store/bottom.html" %}
