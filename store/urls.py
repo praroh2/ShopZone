@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     
     url(r'^login/$', views.login_page),
     url(r'^login_okay/$', views.login_okay),
+    url(r'^signup/$', views.signup),
     
     url(r'^my_orders/$', views.my_orders),
     url(r'^my_orders/(?P<order_id>\d+)/$', views.my_order_pdf),

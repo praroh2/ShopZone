@@ -64,17 +64,29 @@ def login_okay(request): ## TR1 Done.
     """
     global user
     username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        if user.is_active:
-            login(request, user)
-            return HttpResponseRedirect('/shop/')
-        else:
-            user = None
-            return HttpResponseRedirect('/shop/login/')
+    password = request.POST['password'] 
+    user = Customer.objects.all().filter(customer_name = username)[0]
+    if user is not None and user.password == password:
+        return HttpResponseRedirect('/shop/')
     else:
         return HttpResponseRedirect('/shop/login/')
+
+def signup(request):
+    global user
+    name = request.POST['name']
+    password = request.POST['password']
+    repassword = request.POST['repassword']
+    address = request.POST['address']
+    phone = request.POST['phone']
+    email = request.POST['email']
+
+    if password != repassword or password == '':
+        return HttpResponseRedirect('/shop/login/')
+
+    customer = Customer(customer_name = name, password = password, address = address, phone = phone, email = email)
+    customer.save()
+    user = customer
+    return HttpResponseRedirect('/shop/')
 
 def home_page(request): ## VTR1 Done.
     """

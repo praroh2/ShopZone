@@ -101,6 +101,7 @@ class ProductReview(models.Model):
 
 class Customer(models.Model):
     customer_name = models.CharField(max_length=15)
+    password = models.CharField(max_length=30, default="cmr")
     address = models.CharField(max_length=50)
     phone = models.IntegerField(default=0)
     email = models.CharField(max_length=20)

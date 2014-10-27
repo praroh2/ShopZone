@@ -30,7 +30,7 @@ class OrderAdmin(admin.ModelAdmin):
 
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ['customer_name', 'email', 'phone', 'address', 'purchase_history', 'store_credit']
-    search_fields = ['customer_name']
+    search_fields = ['customer_name', 'email']
 
 class ProductReviewAdmin(admin.ModelAdmin):
     list_display = ['product', 'rating', 'review', 'time_stamp', 'sentiment']
