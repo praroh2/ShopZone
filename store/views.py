@@ -10,8 +10,8 @@ from store import AFINN
 import re, random
 
 
-##user = authenticate(customer_name='Surya', password='cmr') ## Use this while debugging.
-user = None ## Use this to force a login.
+user = Customer.objects.get(pk=3) ## Use this while debugging.
+##user = None ## Use this to force a login.
 
 def calculate_average_rating(reviews): ## TR1 Done.
 	"""
@@ -104,7 +104,7 @@ def home_page(request): ## VTR1 Done.
 	except:
 		return HttpResponseRedirect('/shop/login/')
 	## Get Products, categories and store reviews.
-	all_products_list = Product.objects.raw("select * from store_Product order by number_sold")#all().order_by('-number_sold')
+	all_products_list = Product.objects.all().order_by('-number_sold')#raw("select * from store_Product order by number_sold")
 	categories = set([product.category.category for product in all_products_list])
 
 	store_review = StoreReview.objects.all().order_by('time_stamp')[:10]
@@ -163,7 +163,7 @@ def by_category(request, product_category): ## T2 Done.
 
 	product_category = product_category[0].upper() + product_category[1:].lower()
 	all_products_list = Product.objects.all()
-	sub_categories = [i.category for i in all_products_list if i.category.category.category_name == product_category]
+	sub_categories = list(set([i.category for i in all_products_list if i.category.category.category_name == product_category]))
 	context = {'sub_categories': sub_categories, 'product_category': product_category}
 	return render(request, 'store/by_category.html', context)
 
