@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from store.models import Seller, SellerReview, Product, ProductReview, StoreReview
-from store.models import Customer, Order, Category, SubCategory
+from store.models import Customer, Order, Category, SubCategory, Image
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['pk', 'category_name']
@@ -52,3 +52,4 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductReview, ProductReviewAdmin)
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Order, OrderAdmin)
+admin.site.register(Image)

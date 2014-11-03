@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import timezone
 from django.contrib.auth import authenticate, login
 from store.models import Product, ProductReview, Seller, SellerReview, StoreReview
-from store.models import Order, Customer
+from store.models import Order, Customer, Image
 
 from store import AFINN
 
@@ -181,6 +181,9 @@ def product(request, product_id): ## T2 Done.
 	seller = Seller.objects.all().filter(seller_name=product.seller)[0] #Wow! :@
 	reviews = ProductReview.objects.all().filter(product=product_id)
 	avg_rating = calculate_average_rating(reviews)
+	image = Image.objects.all().filter(product=product_id)
+	if len(image) > 0:
+		image = image[0]
 
 	## Related product suggestions.
 	related1 = Product.objects.all().filter(seller=product.seller)
@@ -200,8 +203,7 @@ def product(request, product_id): ## T2 Done.
 	random.shuffle(related)
 	del(random)
 	## End of related.
-
-	context = {'product':product, 'seller':seller.pk, 'avg_rating':avg_rating, 'related':related, 'user':user}
+	context = {'product':product, 'seller':seller.pk, 'avg_rating':avg_rating, 'related':related, 'image':image, 'user':user}
 	return render(request, 'store/product.html', context)
 
 def product_review(request, product_id): ## VTR1 Done.

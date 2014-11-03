@@ -79,6 +79,13 @@ class Product(models.Model):
     def __str__(self):
         return self.product_name
 
+class Image(models.Model):
+	product = models.ForeignKey(Product)
+	link = models.CharField(max_length=2000)
+	
+	def __str__(self):
+		return str(self.product.product_name)
+
 class ProductReview(models.Model):
     RATING_LEVELS = (
         (1, '1'),

@@ -12,7 +12,14 @@
 		</div>
 
 		{% if product %}
-			<div style="width:49%; heigth:200px; float:left;">
+			<div style="width:49%; heigth:200px; float:left; overflow:scroll;">
+				<div align="center">
+					{% if image %}
+						<img src="{{ image.link }}" height="200px"/>
+					{% else %}
+						<img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDACodICUgGiolIiUvLSoyP2lEPzo6P4FcYUxpmYagnpaGk5GovfLNqLPltZGT0v/V5fr/////o8v///////L/////2wBDAS0vLz83P3xERHz/rpOu////////////////////////////////////////////////////////////////////wAARCABnAGcDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDShijMKfu0+6P4R6U/yY/+eaf98iiH/Ux/7o/lT6YDPJj/AOeaf98ijyY/+eaf98in0UgGeTH/AM80/wC+RR5Mf/PNP++RT6KAGeTH/wA80/75FHkx/wDPNP8AvkU+igBnkx/880/75FHkx/8APNP++RT6KAGeTH/zzT/vkUeTH/zzT/vkU+igBgij/wCeaf8AfIop9FADIf8AUx/7o/lT6ZD/AKmP/dH8qfQAUUUUAFFVTcOJbteMQoCvHsTUEd7KxtQQuZCQ/HuR/SnYDRoqp9pf+0fIwNm3Ge+7Gf5ULNO90wUKYlk2EY5AxnOaLAW6KrxSSyXMoLKI422gY5PAPWrFIAooooAKKKKAGQ/6mP8A3R/Kn0yH/Ux/7o/lT6ACiiigCi8b+ZfkI3zxgLx1+U9KgihkFwuY22rIuDjsQxP6mtWoTdRCRo8ncrKp47npVXAp7JvtQmKnb9oI27ecYxnPpRtdb3AWQEz7iQDtK7fy61be6iScREndkAkDgE9Mml+0p9o8jD7+v3TjHrmi4EMCqt9OWibczfK+3jGB3q5RRUgFFFFABRRRQAyH/Ux/7o/lT6ZD/qY/90fyp9ABRRRQAVlTfLfE/wB+ZV/Laf6mtWomt4mbcyZIffnJ6+tNOwFCf/j8m/66w1a/5iv/AGw/9mqR7aF5hKyZcYOcnt04p/lp5vm7fn27c+1O4D6KKKkAooooAKKKKAGQ/wCpj/3R/Kn0yH/Ux/7o/lT6ACiiigClBtOo3BIcuCMHnAGB+FQacSZ42LEmSNi2T1O6r0MTRzTOSMSMCMfTFQWlpJBKC7KVRSq4zk5Oeaq4EVixMsGST8knf/bplmzfaY1LE5dz17Ef/WNWLW1khmBdlKIGC4zk5OeaSGzeO4ikLKQgYEDvknH86d0BFASt+pDN88sobk4IHStOqUVpIt15jsu1WdlAzn5vWrtSwCiiikAUUUUAMh/1Mf8Auj+VPpkP+pj/AN0fyp9ABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAFeK4iESAv/COxp32mL+/+hooq+UA+0xf3/0NH2mL+/8AoaKKOVAH2mL+/wDoaPtMX9/9DRRRyoA+0xf3/wBDR9pi/v8A6GiijlQB9pi/v/oaPtMX9/8AQ0UUcqAPtMX9/wDQ0faYv7/6GiijlQC/aYv7/wChoooo5QP/2Q==" height="100px" />
+					{% endif %}
+				</div>
 				<table align="center"  style="font-size:1.1em;">
 					<tr align="center">
 						<td width="30%"> Name: </td>
